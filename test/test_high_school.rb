@@ -7,7 +7,4 @@ class TestHighSchool < Minitest::Test
     refute_nil ::HighSchool::VERSION
   end
 
-  def test_it_does_something_useful
-    assert false
-  end
 end
