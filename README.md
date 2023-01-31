@@ -1,4 +1,4 @@
-# HighSchool
+# High School - a Redis mutex in Ruby and Lua
 
 I had my backpack stolen in high school while I was distracted playing chess. :(
 
