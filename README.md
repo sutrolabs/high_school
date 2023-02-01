@@ -31,7 +31,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
     lock_timeout: 1.hour
     ) do
 
-    # keep this code safe from other threads trampling on.
+    # keep this code safe from other threads ~~stealing your backpack~~ trampling on.
 end
 ```
 
