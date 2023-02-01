@@ -8,8 +8,8 @@ module HighSchool
   # https://redislabs.com/ebook/part-2-core-concepts/chapter-6-application-components-in-redis/6-2-distributed-locking/6-2-5-locks-with-timeouts/
   class Locker
 
-    # unlock is a lua script because this call will run atomically vs having to issue 2 calls independently to delete the lock
-    # script makes sure that the creator of the lock is the one deleting the lock.
+    # unlock is a lua script because this call will run atomically vs having to issue 2 calls independently to delete the lock.
+    # Script alo makes sure that the creator of the lock is the one deleting the lock.
     UNLOCK_LUA_SCRIPT = "if redis.call('get',KEYS[1])==ARGV[1] then redis.call('del',KEYS[1]) end"
 
     def initialize(redis)
