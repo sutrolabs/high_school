@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "high_school/version"
+require 'securerandom'
 
 module HighSchool
   # implements the locking strategy from Redis Labs' book about... Redis
