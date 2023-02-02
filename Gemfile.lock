@@ -1,14 +1,19 @@
 PATH
   remote: .
   specs:
-    high_school (0.1.3)
+    high_school (0.1.4)
+      redis
 
 GEM
   remote: https://rubygems.org/
   specs:
+    connection_pool (2.3.0)
     minitest (5.17.0)
     rake (13.0.6)
-    redis (4.8.0)
+    redis (5.0.6)
+      redis-client (>= 0.9.0)
+    redis-client (0.12.1)
+      connection_pool
 
 PLATFORMS
   ruby
@@ -17,7 +22,6 @@ DEPENDENCIES
   high_school!
   minitest (~> 5.0)
   rake (~> 13.0)
-  redis
 
 BUNDLED WITH
    2.3.22
