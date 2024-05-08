@@ -40,10 +40,10 @@ module HighSchool
           end
         end
 
+        raise LockNotAcquired.new("Waited #{acquire_timeout} seconds to get lock for #{lock_name}")
+      rescue LockNotAcquired
         retries += 1
         retry if retries <= attempts
-
-        raise LockNotAcquired.new("Waited #{acquire_timeout} seconds to get lock for #{lock_name}")
       ensure
         @redis.eval(UNLOCK_LUA_SCRIPT, [lock_name], [identifier])
       end
