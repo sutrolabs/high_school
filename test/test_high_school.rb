@@ -18,7 +18,8 @@ class TestHighSchool < Minitest::Test
       Thread.new do
         locker.lock("the_name_of_my_lock",
                     acquire_timeout: 10,
-                    lock_timeout: 3600
+                    lock_timeout: 3600,
+                    attempts: 5
                     ) do
 
             before = x.to_i
@@ -30,5 +31,28 @@ class TestHighSchool < Minitest::Test
     end.each(&:join)
 
     assert_equal 10, x
+  end
+
+  def test_lock_not_acquired
+    redis = Redis.new
+    locker = HighSchool::Locker.new(redis)
+
+    x = 0
+
+    error = assert_raises(HighSchool::Locker::LockNotAcquired) do
+      redis.stub(:set, false) do
+        locker.lock("the_name_of_my_lock",
+                    acquire_timeout: 1,
+                    lock_timeout: 1,
+                    attempts: 5
+                   ) do
+          x += 1
+          assert_equal 1, x
+        end
+      end
+    end
+
+    assert_equal "Waited 6 seconds to get lock for lock:the_name_of_my_lock", error.message
+    assert_equal 0, x
   end
 end

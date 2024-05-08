@@ -26,6 +26,7 @@ module HighSchool
 
       # prefix it to make them easier to find in redis if we need to.
       lock_name = "lock:" + lock_name
+      duration = acquire_timeout
       retries = 0
       begin
         end_time = Time.now + acquire_timeout if acquire_timeout
@@ -40,10 +41,12 @@ module HighSchool
           end
         end
 
-        raise LockNotAcquired.new("Waited #{acquire_timeout} seconds to get lock for #{lock_name}")
+        raise LockNotAcquired.new("Waited #{duration} seconds to get lock for #{lock_name}")
       rescue LockNotAcquired
         retries += 1
+        duration += acquire_timeout
         retry if retries <= attempts
+        raise
       ensure
         @redis.eval(UNLOCK_LUA_SCRIPT, [lock_name], [identifier])
       end
