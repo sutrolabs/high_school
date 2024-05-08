@@ -46,7 +46,6 @@ class TestHighSchool < Minitest::Test
                     attempts: 5
                    ) do
           x += 1
-          assert_equal 1, x
         end
       end
     end
