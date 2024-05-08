@@ -42,7 +42,7 @@ class TestHighSchool < Minitest::Test
       redis.stub(:set, false) do
         locker.lock("the_name_of_my_lock",
                     acquire_timeout: 1,
-                    lock_timeout: 1,
+                    lock_timeout: 3600,
                     attempts: 5
                    ) do
           x += 1
