@@ -21,15 +21,15 @@ module HighSchool
 
     # A default timeout of 10 seconds is set on the lock. You probably want to set that to something safe for yourself.
     # But leaving it locked for infinity is probably not what you want.
-    def lock(lock_name, acquire_timeout: nil, lock_timeout: 10, &block)
+    def lock(lock_name, acquire_timeout: nil, lock_timeout: 10, attempts: 0, &block)
       identifier = SecureRandom.uuid
-
-      end_time = Time.now + acquire_timeout if acquire_timeout
 
       # prefix it to make them easier to find in redis if we need to.
       lock_name = "lock:" + lock_name
-
+      retries = 0
       begin
+        end_time = Time.now + acquire_timeout if acquire_timeout
+
         while end_time.nil? || Time.now < end_time
           # returns false if the lock with this name already exists
           if @redis.set(lock_name, identifier, nx: true, ex: lock_timeout)
@@ -39,6 +39,9 @@ module HighSchool
             sleep(rand(0.10..0.5))
           end
         end
+
+        retries += 1
+        retry if retries <= attempts
 
         raise LockNotAcquired.new("Waited #{acquire_timeout} seconds to get lock for #{lock_name}")
       ensure
