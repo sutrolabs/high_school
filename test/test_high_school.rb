@@ -18,8 +18,7 @@ class TestHighSchool < Minitest::Test
       Thread.new do
         locker.lock("the_name_of_my_lock",
                     acquire_timeout: 10,
-                    lock_timeout: 3600,
-                    attempts: 5
+                    lock_timeout: 3600
                     ) do
 
             before = x.to_i
